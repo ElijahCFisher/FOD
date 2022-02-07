@@ -1,37 +1,34 @@
-function fuck(a) {
+async function fuck(a) {
     var ret = []
     for await (const v of a) {
-        ret.append(v)
+        ret.push(v)
     }
     return ret
 } 
 
-direc = await window.showDirectoryPicker()
-vals = await direc.values()
-// console.log(Iterators.size(vals))
-var sz = 0
-// var lst = fuck(direc.values())
-// var fileLst = lst.filter(e => e.kind == "file")
+/* TODO
+    center and standardize size for image
+    save directory chosen
+    if day != prevday choose different file
+    have button for just selecting pic (not directory again)
+    add functionality for text
+    add functionality for ".doc"s?
+    show raw
+*/
+const main = async () => {
+    direc = await window.showDirectoryPicker({startIn: 'pictures'})
+    vals = await direc.values()
 
-// var f = await fileLst[Math.floor((Math.random()*fileLst.length))].getFile()
-// console.log(await f.text())
+    var sz = 0
+    var lst = await fuck(direc.values())
+    var fileLst = lst.filter(e => e.kind == "file")
 
+    var f = await fileLst[Math.floor((Math.random()*fileLst.length))].getFile()
 
-sz = 3
-i = 0
-a = direc.values()
-ind = Math.floor((Math.random()*sz));
-for await (const entry of a) {
-    if (entry.kind == 'file')   {
-        if (i == ind) {
-            var f = await entry.getFile()
-            console.log(await f.text())
-            break
-        }
-        i += 1
+    var fr = new FileReader();
+    fr.readAsDataURL(f)
+    fr.onloadend = function() {
+        document.getElementById('img').src = fr.result;
     }
+
 }
-// if (entry.kind == 'file')   { 
-//     console.log(f=await entry.getFile())
-//     console.log(await f.text())
-// }
