@@ -18,7 +18,7 @@ async function fuck(a) {
     nicetohave: change how to open file (e.g. gif as text file)
 
    NOTES
-    works with jpg, png, webp (moving and not)
+    works with jpg, png, webp (moving and not), gif (moving and not)
 */
 const main = async () => {
     direc = await window.showDirectoryPicker({startIn: 'pictures'})
@@ -30,10 +30,15 @@ const main = async () => {
 
     var f = await fileLst[Math.floor((Math.random()*fileLst.length))].getFile()
 
-    var fr = new FileReader();
-    fr.readAsDataURL(f)
-    fr.onloadend = function() {
-        document.getElementById('img').src = fr.result;
+    if (f.name.includes(".pdf")) {//hopefully we don't get trolled
+
+    }
+    else {
+        var fr = new FileReader();
+        fr.readAsDataURL(f)
+        fr.onloadend = function() {
+            document.getElementById('img').src = fr.result;
+        }
     }
 
 }
