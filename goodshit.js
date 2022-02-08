@@ -7,13 +7,18 @@ async function fuck(a) {
 } 
 
 /* TODO
-    center and standardize size for image
     save directory chosen
     if day != prevday choose different file
     have button for just selecting pic (not directory again)
     add functionality for text
     add functionality for ".doc"s?
     show raw
+    integrate ads
+    make sure video works
+    nicetohave: change how to open file (e.g. gif as text file)
+
+   NOTES
+    works with jpg, png, webp (moving and not)
 */
 const main = async () => {
     direc = await window.showDirectoryPicker({startIn: 'pictures'})
