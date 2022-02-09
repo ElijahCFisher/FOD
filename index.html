@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script src="goodshit.js"></script>
+        <!-- <script src="https://unpkg.com/idb-keyval@5.0.2/dist/esm/index.js"></script> -->
+        <!-- <script>window.onload = load</script> -->
 
         <style>
             html {
@@ -50,7 +51,15 @@
             }
 
             #pdf {
-                display: none;
+                width: 100%;
+                min-height:100%;
+                max-height:100%;
+                object-fit:contain;
+
+                margin: auto;
+            }
+
+            #txt {
                 width: 100%;
                 min-height:100%;
                 max-height:100%;
@@ -70,13 +79,15 @@
     </head>
 
     <body>
+        <script type="module" src="goodshit.js"></script>
         <div class="header">
-            <button type="button" onclick="main()" value="directory"> Directory </button>
+            <button type="button" onclick="button()" value="directory"> Directory </button>
         </div>
         <div class="margin"></div>
         <div class="image">
             <img id="img">
             <canvas id="pdf"></canvas>
+            <p id="txt"></p>
         </div>
         <div class="margin2"></div>
         <div class="footer"></div>
