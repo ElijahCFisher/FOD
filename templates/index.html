@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <!-- <script src="https://unpkg.com/idb-keyval@5.0.2/dist/esm/index.js"></script> -->
-        <!-- <script>window.onload = load</script> -->
+        <script type="module">
+            import * as script from "{{url_for('static', filename='goodshit.js')}}"
+            console.log("adsf")
+            window.button = script.button
+            //window.onload = script.load
+            window.load = script.load
+        </script>
 
         <style>
             html {
@@ -79,9 +84,9 @@
     </head>
 
     <body>
-        <script type="module" src="goodshit.js"></script>
         <div class="header">
             <button type="button" onclick="button()" value="directory"> Directory </button>
+            <button type="button" onclick="load()" value="refresh"> Refresh </button>
         </div>
         <div class="margin"></div>
         <div class="image">
