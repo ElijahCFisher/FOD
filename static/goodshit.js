@@ -9,29 +9,59 @@ async function fuck(a) {
 }
 
 function unhide(a) {
-    document.getElementById('txt').hidden = a!="txt"
-    document.getElementById('img').hidden = a!="img"
-    document.getElementById('pdf').hidden = a!="pdf"
+    document.getElementById("txt").hidden = a!="txt"
+    document.getElementById("img").hidden = a!="img"
+    document.getElementById("pdf").hidden = a!="pdf"
+}
+
+export async function makePicker() {
+    var direcs = await get("dirs")
+
+    var select = document.getElementById("selection")
+
+    for (var i = select.options.length-1; i > -1; i--)
+        select.remove(i)
+
+    var option = document.createElement("option")
+    option.text = "all"
+    option.value = "all"
+    select.append(option)
+    // console.log("uh", direcs)
+
+    for (var i = 0; i < direcs.length; i++) {
+        var dir = direcs[i]
+        // console.log("OKK", dir, dir.name)
+        var option = document.createElement("option")
+        option.text = dir.name
+        option.value = i
+        select.appendChild(option)
+    }
 }
 
 export async function load(event, direc = null) {
+    console.log("direc is ", direc)
     if (direc == null) {
         var direcs = await get('dirs')
-        console.log(direcs)
+        // console.log(direcs)
         if (direcs == null || direcs.length == 0) return
-        direc = direcs[Math.floor((Math.random()*direcs.length))]
+
+        var selection = document.getElementById("selection").value
+        if (selection == "all")
+            direc = direcs[Math.floor((Math.random()*direcs.length))]
+        else
+            direc = direcs[selection]
     }
 
-    console.log(direc)
+    console.log("this is a direc", direcs)
 
     const options = {}
-    console.log("uhhh")
+    // console.log("uhhh")
     options.mode = 'read'
-    console.log("mmmm")
+    // console.log("mmmm")
     if (await direc.queryPermission(options) != 'granted')
         await direc.requestPermission(options)
     
-    console.log("tf?")
+    // console.log("tf?")
     var lst = await fuck(direc.values())
     var fileLst = lst.filter(e => e.kind == "file")
 
@@ -57,6 +87,11 @@ export async function load(event, direc = null) {
     }
 }
 
+export async function unload() {
+    await set('dirs', null)
+    makePicker()
+}
+
 /* TODO
     save directory chosen
     if day != prevday choose different file
@@ -76,13 +111,20 @@ export const button = async () => {
     
     // await set('dirs', null)
     var dirs = await get('dirs')
-    console.log(dirs)
-    // console.log(await dirs[0].isSameEntry(direc))
-    if (dirs == null || dirs.filter(a => a.isSameEntry(direc)).length == 0) {
+    // console.log(dirs)
+    // console.log(dirs.reduce((acc, v) => {
+    //     return acc + v.name
+    // }, ""))
+    // console.log(await dirs[0].isSameEntry(direc), await dirs.reduce(async (acc, v) => {
+    //     // console.log("meh", acc, (await v.isSameEntry(direc)), (await acc) || (await v.isSameEntry(direc)))
+    //     return ((await acc) || (await v.isSameEntry(direc)))
+    // }, false))
+    if (dirs == null || !(await dirs.reduce(async (acc, v) => {return ((await acc) || (await v.isSameEntry(direc)))}, false))) {
         await set('dirs', dirs==null? [direc] : [...dirs, direc])
-        console.log(await get('dirs'))
+        // console.log("12", await get('dirs'))
     }
 
+    await makePicker()
     await load(null, direc)
 }
 

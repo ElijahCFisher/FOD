@@ -5,8 +5,9 @@
             import * as script from "{{url_for('static', filename='goodshit.js')}}"
             console.log("adsf")
             window.button = script.button
-            //window.onload = script.load
+            window.onload = script.makePicker
             window.load = script.load
+            window.unload = script.unload
         </script>
 
         <style>
@@ -87,6 +88,8 @@
         <div class="header">
             <button type="button" onclick="button()" value="directory"> Directory </button>
             <button type="button" onclick="load()" value="refresh"> Refresh </button>
+            <button type="button" onclick="unload()" value="unload"> Unload </button>
+            <select name="directory" id="selection"></select>
         </div>
         <div class="margin"></div>
         <div class="image">
