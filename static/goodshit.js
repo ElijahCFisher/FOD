@@ -1,5 +1,7 @@
 import { get, set } from 'https://unpkg.com/idb-keyval@5.0.2/dist/esm/index.js'
 
+var vidFileTypes = ["mp4", "mkv", "mov", "webm"]
+
 async function fuck(a) {
     var ret = []
     for await (const v of a) {
@@ -9,9 +11,9 @@ async function fuck(a) {
 }
 
 function unhide(a) {
-    document.getElementById("txt").hidden = a!="txt"
-    document.getElementById("img").hidden = a!="img"
-    document.getElementById("pdf").hidden = a!="pdf"
+    for (const typ of ["txt", "img", "pdf", "vid"] ){
+        document.getElementById(typ).style.display = a==typ ? "block" : "none" 
+    }
 }
 
 export async function makePicker() {
@@ -71,12 +73,23 @@ export async function load(event, direc = null) {
     fr.readAsDataURL(f)
 
     if (f.name.includes(".pdf")) {//hopefully we don't get trolled
+        var fileURL = window.URL.createObjectURL(f) 
+        document.getElementById("pdf").src = fileURL;
+        console.log("uhh", fileURL)
         unhide("pdf")
     }
     else if (f.name.includes(".txt")) {
         fr.onloadend = function() {
             document.getElementById("txt").innerText = txt;
             unhide("txt")
+        }
+    }
+    else if(vidFileTypes.some(v => f.name.includes(v))) {
+        fr.onloadend = function() {
+            console.log("loaded a vid")
+            var fileURL = window.URL.createObjectURL(f) 
+            document.getElementById("vid").src = fileURL
+            unhide("vid")
         }
     }
     else {
